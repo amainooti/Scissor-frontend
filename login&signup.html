@@ -11,14 +11,14 @@
     <main class="main login-body">
       <div class="container" id="container">
         <div class="form-container sign-up-container">
-          <form action="#">
-            <input type="text" placeholder="Userame" />
-            <input type="email" placeholder="Email" />
-            <input type="text" placeholder="Firstname" />
-            <input type="text" placeholder="Lastname" />
-            <input type="password" placeholder="Password" />
-            <input type="password" placeholder="Confirm Password" />
-            <button>Sign Up</button>
+          <form action="#" class="sign-up-form">
+            <input class="username name="username" type="text" placeholder="Username" />
+            <input class="email" name="email" type="email" placeholder="Email" />
+            <input class="firstName" name="firstName" type="text" placeholder="Firstname" />
+            <input class="lastName" name="lastName" type="text" placeholder="Lastname" />
+            <input class="password" name="password" type="password" placeholder="Password" />
+            <input class="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password" />
+            <button type="submit">Sign Up</button>
           </form>
         </div>
         <div class="form-container sign-in-container">
@@ -51,17 +51,70 @@
     </main>
 
     <script>
-      const signUpButton = document.getElementById("signUp");
-      const signInButton = document.getElementById("signIn");
-      const container = document.getElementById("container");
+const signUpButton = document.getElementById("signUp");
+const signInButton = document.getElementById("signIn");
+const container = document.getElementById("container");
+const signUpformContainer = document.querySelector(".form-container");
+const api = "https://scissor-g3ga.onrender.com/";
 
-      signUpButton.addEventListener("click", () => {
-        container.classList.add("right-panel-active");
-      });
 
-      signInButton.addEventListener("click", () => {
-        container.classList.remove("right-panel-active");
-      });
+signUpButton.addEventListener("click", () => {
+  container.classList.add("right-panel-active");
+});
+
+signInButton.addEventListener("click", () => {
+  container.classList.remove("right-panel-active");
+});
+
+const form = document.querySelector(".sign-up-form");
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const userName = document.querySelector(".username").value;
+  const firstName = document.querySelector(".firstName").value;
+  const lastName = document.querySelector(".lastName").value;
+  const password = document.querySelector(".password").value;
+  const email = document.querySelector(".email").value;
+
+  // Validate password confirmation
+  const confirmPassword = document.querySelector(".confirmPassword").value;
+  if (password !== confirmPassword) {
+    // Throw error passwords don't match
+    console.error("Passwords don't match");
+    return;
+  }
+
+  const data = {
+    username: userName,
+    first_name: firstName,
+    last_name: lastName,
+    password: password,
+    email: email,
+  };
+
+  try {
+    const urlFetch = await fetch(api + "/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (urlFetch.ok) {
+      // Handle success
+      console.log("Sign up successful");
+    } else {
+      // Handle error
+      console.error("Sign up failed");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+form.addEventListener("submit", handleSubmit);
+
     </script>
   </body>
 </html>
