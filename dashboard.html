@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
+    />
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="dashboard.js"></script>
+  </head>
+  <body id="body-pd">
+    <header class="header" id="header">
+      <div class="header_toggle">
+        <i class="bx bx-menu" id="header-toggle"></i>
+      </div>
+      <div class="header_img">
+        <img src="#" alt="" />
+      </div>
+      <button type="button" class="btn btn-custom position-relative">
+        New Link
+        </span>
+      </button>
+    </header>
+    <div class="l-navbar" id="nav-bar">
+      <nav class="nav">
+        <div>
+          <a href="#dashboard" class="nav_logo">
+            <i class="bx bx-layer nav_logo-icon"></i>
+            <span class="nav_logo-name">Scissor</span>
+          </a>
+          <div class="nav_list">
+            <a href="#dashboard" class="nav_link active">
+              <i class="bx bx-grid-alt nav_icon"></i>
+              <span class="nav_name">Dashboard</span>
+            </a>
+            <a href="#short-urls" class="nav_link">
+              <i class="bx bx-user nav_icon"></i>
+              <span class="nav_name">Short urls</span>
+            </a>
+            <a href="#qrcode" class="nav_link">
+              <i class="bx bx-message-square-detail nav_icon"></i>
+              <span class="nav_name">QRcodes</span>
+            </a>
+            <a href="#account" class="nav_link">
+              <i class="bx bx-bar-chart-alt-2 nav_icon"></i>
+              <span class="nav_name">Account</span>
+            </a>
+          </div>
+        </div>
+        <a href="#" class="nav_link">
+          <i class="bx bx-log-out nav_icon"></i>
+          <span class="nav_name">SignOut</span>
+        </a>
+      </nav>
+    </div>
+    <!--Container Dashboard start-->
+    <div class="main-content">
+    <div class="height-100 bg-light" id="dashboard" style="display: none;">
+      <h2>Overview</h2>
+      <div class="ag-format-container">
+  <div class="ag-courses_box">
+
+    <div class="ag-courses_item">
+      <a href="#" class="ag-courses-item_link">
+        <div class="ag-courses-item_bg"></div>
+
+        <div class="ag-courses-item_title">
+          Front-end development&#160;+ jQuery&#160;+ CMS
+        </div>
+      </a>
+    </div>
+
+    <div class="ag-courses_item">
+      <a href="#" class="ag-courses-item_link">
+        <div class="ag-courses-item_bg">
+        </div>
+        <div class="ag-courses-item_title">
+          Digital Marketing
+        </div>
+      </a>
+    </div>
+
+    <div class="ag-courses_item">
+      <a href="#" class="ag-courses-item_link">
+        <div class="ag-courses-item_bg"></div>
+
+        <div class="ag-courses-item_title">
+          Interior Design
+        </div>
+
+        <div class="ag-courses-item_date-box">
+          Start:
+          <span class="ag-courses-item_date">
+            31.10.2022
+          </span>
+        </div>
+      </a>
+    </div>
+
+  </div>
+</div>
+<h4>Activity</h4>
+<table class="table table-bordered">
+ <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Short</th>
+      <th scope="col">Original</th>
+      <th scope="col">Clicks</th>
+      <th scope="col">Date created</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+      <td>@mdo</td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+    <div class="height-100 bg-light" id="short-urls" style="display: none;">
+        <h1>OMoooo</h1>
+     </div>
+     <div class="height-100 bg-light" id="qrcode" style="display: none;">
+        <h1>QRcode</h1>
+     </div>
+     <div class="height-100 bg-light" id="account" style="display: none;">
+        <h1>Account</h1>
+     </div>
+     
+    </div>
+    <!--Container Dashboard end-->
+    <script>
+        const sidebarLinks = document.querySelectorAll('.nav_list a');
+const contentDivs = document.querySelectorAll('.main-content > div');
+
+sidebarLinks.forEach((link, index) => {
+link.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    // Hide all content divs
+    contentDivs.forEach((div) => {
+    div.style.display = 'none';
+    });
+
+    // Show the corresponding content div
+    contentDivs[index].style.display = 'block';
+});
+});
+    </script>
+  </body>
+</html>
