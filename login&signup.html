@@ -1,120 +1,273 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
     <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
+    <title>Document</title>
+</head>
+<body class="body">
     <main class="main login-body">
-      <div class="container" id="container">
-        <div class="form-container sign-up-container">
-          <form action="#" class="sign-up-form">
-            <input class="username name="username" type="text" placeholder="Username" />
-            <input class="email" name="email" type="email" placeholder="Email" />
-            <input class="firstName" name="firstName" type="text" placeholder="Firstname" />
-            <input class="lastName" name="lastName" type="text" placeholder="Lastname" />
-            <input class="password" name="password" type="password" placeholder="Password" />
-            <input class="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password" />
-            <button type="submit">Sign Up</button>
-          </form>
-        </div>
-        <div class="form-container sign-in-container">
-          <form action="#">
-            <h1>Login</h1>
-            <input type="email" placeholder="Email" />
-            <input type="password" placeholder="Password" />
-            <a href="request-reset.html">Forgot your password?</a>
-            <button>Sign In</button>
-          </form>
-        </div>
-        <div class="overlay-container">
-          <div class="overlay">
-            <div class="overlay-panel overlay-left">
-              <h1>Welcome Back!</h1>
-              <p>
-                To stay in touch with us, please log in using your personal
-                credentials
-              </p>
-              <button class="ghost" id="signIn">Sign In</button>
+        <div class="container" id="container">
+            <div class="form-container sign-up-container">
+                <small class="form-is-signed-up"></small>
+                <form method="POST" action="#" class="sign-up-form" onsubmit="handleSignUp(event)">
+                    <input class="username" name="username" type="text" placeholder="Username" required />
+                    <small id="alert-username"></small>
+                    <input class="email" name="email" type="email" placeholder="Email" />
+                    <small id="alert-email"></small>
+                    <input class="firstName" name="firstName" type="text" placeholder="Firstname" required />
+                    <small id="alert-firstname"></small>
+                    <input class="lastName" name="lastName" type="text" placeholder="Lastname" required />
+                    <small id="alert-lastname"></small>
+                    <input class="password" name="password" type="password" placeholder="Password" required />
+                    <small id="alert-password"></small>
+                    <input class="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password"
+                        required />
+                    <small id="alert-confirm-password"></small>
+                    <button type="submit">Sign Up</button>
+                </form>
             </div>
-            <div class="overlay-panel overlay-right">
-              <h1>Hello!</h1>
-              <p>Enter your personal information and start a journey with us</p>
-              <button class="ghost" id="signUp">Sign Up</button>
+            <div class="form-container sign-in-container">
+                <form method="POST" action="#" onsubmit="handleLogin(event)">
+                    <span class="login-message"></span>
+                    <h1>Login</h1>
+                    <input id="login-email" type="email" placeholder="Email" required />
+                    <span id="login-email-message"></span>
+                    <input id="login-password" type="password" placeholder="Password" required />
+                    <span id="login-password-message"></span>
+
+                    <a href="request-reset.html">Forgot your password?</a>
+                    <button type="submit">Sign In</button>
+                </form>
             </div>
-          </div>
+            <div class="overlay-container">
+                <div class="overlay">
+                    <div class="overlay-panel overlay-left">
+                        <h1>Welcome Back!</h1>
+                        <p>To stay in touch with us, please log in using your personal credentials</p>
+                        <button class="ghost" id="signIn">Sign In</button>
+                    </div>
+                    <div class="overlay-panel overlay-right">
+                        <h1>Hello!</h1>
+                        <p>Enter your personal information and start a journey with us</p>
+                        <button class="ghost" id="signUp">Sign Up</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </main>
 
     <script>
-const signUpButton = document.getElementById("signUp");
-const signInButton = document.getElementById("signIn");
-const container = document.getElementById("container");
-const signUpformContainer = document.querySelector(".form-container");
-const api = "https://scissor-g3ga.onrender.com/";
+        const signUpButton = document.getElementById("signUp");
+        const signInButton = document.getElementById("signIn");
+        const container = document.getElementById("container");
+        const signUpformContainer = document.querySelector(".form-container");
+        const api = "https://scissor-g3ga.onrender.com/";
+
+        signUpButton.addEventListener("click", () => {
+            container.classList.add("right-panel-active");
+        });
+
+        signInButton.addEventListener("click", () => {
+            container.classList.remove("right-panel-active");
+        });
 
 
-signUpButton.addEventListener("click", () => {
-  container.classList.add("right-panel-active");
-});
 
-signInButton.addEventListener("click", () => {
-  container.classList.remove("right-panel-active");
-});
 
-const form = document.querySelector(".sign-up-form");
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  const userName = document.querySelector(".username").value;
-  const firstName = document.querySelector(".firstName").value;
-  const lastName = document.querySelector(".lastName").value;
-  const password = document.querySelector(".password").value;
-  const email = document.querySelector(".email").value;
 
-  // Validate password confirmation
-  const confirmPassword = document.querySelector(".confirmPassword").value;
-  if (password !== confirmPassword) {
-    // Throw error passwords don't match
-    console.error("Passwords don't match");
-    return;
-  }
+        function handleSignUp(event) {
+            event.preventDefault();
 
-  const data = {
-    username: userName,
-    first_name: firstName,
-    last_name: lastName,
-    password: password,
-    email: email,
-  };
+            let usernameCheck = document.querySelector("#alert-username")
+            let passwordMatch = document.querySelector('#alert-confirm-password');
+            let passwordLength = document.querySelector('#alert-password');
+            let emailVal = document.querySelector('#alert-email');
+            let signUpMessage = document.querySelector('.form-is-signed-up')
+            let userName = document.querySelector(".username").value;
+            let firstName = document.querySelector(".firstName").value;
+            let lastName = document.querySelector(".lastName").value;
+            let password = document.querySelector(".password").value;
+            let email = document.querySelector(".email").value;
 
-  try {
-    const urlFetch = await fetch(api + "/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+            // @Validate password confirmation
 
-    if (urlFetch.ok) {
-      // Handle success
-      console.log("Sign up successful");
-    } else {
-      // Handle error
-      console.error("Sign up failed");
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
+            //function that produces error in DOM
+            const insertError = (span, errorMessage) => {
+                span.innerHTML = errorMessage;
+                setTimeout(() => {
+                    span.innerHTML = "";
+                }, 5000);
+            }
 
-form.addEventListener("submit", handleSubmit);
+            // validate comfirmpassword and password.
+            const confirmPassword = document.querySelector(".confirmPassword").value;
+            if (password !== confirmPassword) {
+                insertError(passwordMatch, "Password do not match.")
+                return;
+            }
+            // check the lenght of the username
+            if (userName.length <= 3 || userName.length > 12) {
+                // Throw error passwords don't match
+                insertError(usernameCheck, "Username is too short or too long.");
+                return;
+            }
+            //check the length of the password
+            if (password.length < 6) {
+                insertError(passwordLength, "Password is too short")
+                return;
+            }
+            //validates email
+            const emailRegex =
+                /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+            email = email.trim();
+
+            if (!emailRegex.test(email)) {
+                insertError(emailVal, "Email must be valid.");
+                return;
+            }
+
+            const data = {
+                username: userName,
+                first_name: firstName,
+                last_name: lastName,
+                password: password,
+                email: email,
+            };
+
+            fetch(api + "signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Handle success
+                        signUpMessage.innerHTML = "Sign Up Success.";
+                        signUpMessage.classList.add("success");
+                        // redirect user to login.
+                        window.location.href = "/login";
+
+                        setTimeout(() => {
+                            signUpMessage.innerHTML = "";
+                            signUpMessage.classList.remove("success");
+                        }, 5000);
+                    } else {
+                        // Handle error
+                        signUpMessage.innerHTML = "Sign up failed, something happend.";
+                        signUpMessage.classList.add("error");
+                        setTimeout(() => {
+                            signUpMessage.innerHTML = "";
+                            signUpMessage.classList.remove("success");
+                        }, 5000);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+
+            let passwordLength = document.querySelector('#login-password-message');
+            let emailVal = document.querySelector('#login-email-message');
+            let loginMessage = document.querySelector(".login-message");
+            let password = document.querySelector("#login-password").value;
+            let email = document.querySelector("#login-email").value;
+
+            // @Validate password confirmation
+
+            //function that produces error in DOM
+            const insertError = (span, errorMessage) => {
+                span.innerHTML = errorMessage;
+                setTimeout(() => {
+                    span.innerHTML = "";
+                }, 5000);
+            }
+
+            //check the length of the password
+            if (password.length < 6 || password.length === 0) {
+                insertError(passwordLength, "Password is too short")
+                return;
+            }
+            //validates email
+            const emailRegex =
+                /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+            email = email.trim();
+
+            if (!emailRegex.test(email)) {
+                insertError(emailVal, "Email must be valid.");
+                return;
+            }
+
+            const data = {
+                password: password,
+                email: email,
+            };
+
+            fetch(api + "login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // get token
+                        const token = response.headers.get('Authorization');
+
+                        // Handle success
+                        loginMessage.innerHTML = "Login Successful.";
+                        loginMessage.classList.add("success");
+
+                        // Store the token in local storage
+                        localStorage.setItem('token', token);
+
+                        // Redirect user to the dashboard
+                        window.location.href = "/dashboard";
+
+                        setTimeout(() => {
+                            loginMessage.innerHTML = "";
+                            loginMessage.classList.remove("success");
+                        }, 5000);
+                    } else {
+                        // Handle error
+
+                        loginMessage.innerHTML = "Sign up failed, something happend.";
+                        loginMessage.classList.add("error");
+                        setTimeout(() => {
+                            loginMessage.innerHTML = "";
+                            loginMessage.classList.remove("success");
+                        }, 5000);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                    console.log(error);
+                });
+        }
+
+
 
     </script>
-  </body>
+
+    <div class="down-arrow">
+        <h1></h1>
+        <!-- icon -->
+    </div>
+    <section class="one"></section>
+    <section class="two"></section>
+    <section class="three"></section>
+
+    <script src="index.js"></script>
+</body>
 </html>
