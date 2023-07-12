@@ -10,7 +10,9 @@ html {
     scroll-behavior: smooth;
     font-size: 16px;
 }
-
+small {
+    color: red;
+}
 body {
     font-family: "Poppins", sans-serif, "Segoe UI", Tahoma, Geneva, Verdana;
     font-weight: 500;
@@ -39,6 +41,16 @@ img {
     max-width: 100%;
 }
 
+
+
+.success {
+    color: #30c59b;
+    text-align: center;
+}
+.error {
+    color: red;
+    text-align: center;
+}
 .btn {
     display: inline-block;
     color: white;
@@ -706,7 +718,7 @@ img {
     .more-features-content>div:nth-child(5):before {
             left: -25px;
         }
-    
+
     .more-features-content>div:nth-child(5):after {
             right: -25px;
         }
@@ -1140,4 +1152,3 @@ form {
 .social-container {
     margin: 20px 0;
 }
-
