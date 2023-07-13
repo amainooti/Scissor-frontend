@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <title>SignUp & SignIn</title>
+    <title> SignUp & SignIn </title>
 </head>
 <body class="body">
     <div id="loader" class="loader"></div>
@@ -169,13 +169,13 @@
                         signUpMessage.innerHTML = "Sign Up Successful.";
                         signUpMessage.classList.add("success");
                         // redirect user to login.
-
-                        window.location.href = "index.html";
+       window.location.href = "index.html";
 
                         setTimeout(() => {
                             signUpMessage.innerHTML = "";
                             signUpMessage.classList.remove("success");
                             //container.classList.add("right-panel-active");
+
                         }, 8000);
 
                     } else {
@@ -249,9 +249,9 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        hideLoader();
-
                         // Handle success
+
+                        hideLoader();
                         response.json().then(data => {
                             const token = data.access_token; // Assuming the token is returned as 'access_token' in the response JSON
 
@@ -267,6 +267,7 @@
                             setTimeout(() => {
                                 loginMessage.innerHTML = "";
                                 loginMessage.classList.remove("success");
+
                             }, 8000);
                         });
                     } else {
@@ -280,7 +281,9 @@
                             setTimeout(() => {
                                 loginMessage.innerHTML = "";
                                 loginMessage.classList.remove("success");
+
                             }, 8000);
+
                         });
                     }
 
