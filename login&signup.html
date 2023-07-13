@@ -5,9 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <title>SignUp & SignIn</title>
+    <title> SignUp & SignIn </title>
 </head>
 <body class="body">
+    <div id="loader" class="loader"></div>
     <main class="main login-body">
         <div class="container" id="container">
             <div class="form-container sign-up-container">
@@ -75,12 +76,22 @@
         });
 
 
+        function showLoader() {
+            const loader = document.getElementById('loader');
+            loader.style.display = 'block';
+        }
 
+        function hideLoader() {
+            const loader = document.getElementById('loader');
+            loader.style.display = 'none';
+        }
 
 
 
         function handleSignUp(event) {
             event.preventDefault();
+            showLoader();
+
 
             let usernameCheck = document.querySelector("#alert-username")
             let passwordMatch = document.querySelector('#alert-confirm-password');
@@ -153,6 +164,7 @@
             })
                 .then(response => {
                     if (response.ok) {
+                        hideLoader();
                         // Handle success
                         signUpMessage.innerHTML = "Sign Up Successful.";
                         signUpMessage.classList.add("success");
@@ -167,6 +179,8 @@
 
                     } else {
                         // Handle error
+                        hideLoader();
+
                         response.json().then(errorData => {
                             signUpMessage.innerHTML = errorData.message || "Sign up failed, something happened.";
                             signUpMessage.classList.add("error");
@@ -185,6 +199,7 @@
         //login logic
         function handleLogin(event) {
             event.preventDefault();
+            showLoader();
 
             let passwordLength = document.querySelector('#login-password-message');
             let emailVal = document.querySelector('#login-email-message');
@@ -232,7 +247,9 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        // Handle success
+
+                        hideLoader();
+       // Handle success
                         response.json().then(data => {
                             const token = data.access_token; // Assuming the token is returned as 'access_token' in the response JSON
 
