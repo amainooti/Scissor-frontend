@@ -169,7 +169,6 @@
                         signUpMessage.innerHTML = "Sign Up Successful.";
                         signUpMessage.classList.add("success");
                         // redirect user to login.
-
                         window.location.href = "index.html";
 
                         setTimeout(() => {
@@ -181,6 +180,7 @@
                     } else {
                         // Handle error
                         hideLoader();
+
                         response.json().then(errorData => {
                             signUpMessage.innerHTML = errorData.message || "Sign up failed, something happened.";
                             signUpMessage.classList.add("error");
@@ -247,9 +247,9 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        hideLoader();
 
-                        // Handle success
+                        hideLoader();
+       // Handle success
                         response.json().then(data => {
                             const token = data.access_token; // Assuming the token is returned as 'access_token' in the response JSON
 
