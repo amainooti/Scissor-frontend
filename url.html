@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="url.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
+    <title>Url</title>
+</head>
+<body>
+    <main>
+        <nav>
+            <h2 class="logo"><i class='bx bx-arrow-back'></i>Scissors</h2>
+            <span class="user"></span>
+        </nav>
+        <form action="#" method="POST" onsubmit="handleSubmit(event)">
+            <div class="container-wrapper">
+                <div id="loader" class="loader"></div>
+                <div class="url-container">
+                    <p class="">Welcome, __user input the values</p>
+                    <input id="target-url" type="text" placeholder="Enter Target Url" />
+                    <button class="btn-url" type="submit">Submit</button>
+                    <small id="text-messages"></small>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        const logoLink = document.querySelector(".logo");
+        const api = "https://scissor-g3ga.onrender.com/";
+
+        // Redirect to dashboard
+        logoLink.addEventListener("click", () => {
+            window.location.href = "dashboard.html";
+        });
+
+        // Protect the route
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = "index.html";
+        }
+
+        //get the user data from localstorage
+        const user = localStorage.getItem('user');
+        const userInfo = JSON.parse(user);
+
+
+        //
+        console.log(userInfo.paid)
+        const form = document.querySelector('form');
+        const username = document.querySelector('.user');
+        const formContainer = document.querySelector('.url-container');
+        username.textContent = userInfo.username;
+
+        // ...
+
+        if (userInfo.paid) {
+            const shortUrlInput = document.createElement('input');
+            shortUrlInput.setAttribute('id', 'short-url');
+            shortUrlInput.setAttribute('type', 'text');
+            shortUrlInput.setAttribute('placeholder', 'Enter short name');
+            formContainer.insertBefore(shortUrlInput, formContainer.querySelector('.btn-url'));
+        }
+
+        // ...
+
+
+
+        function showLoader() {
+            const loader = document.getElementById('loader');
+            loader.style.display = 'block';
+        }
+
+        function hideLoader() {
+            const loader = document.getElementById('loader');
+            loader.style.display = 'none';
+        }
+
+
+
+        const handleSubmit = async (event) => {
+            event.preventDefault();
+            showLoader();
+            const btnSubmit = document.querySelector(".btn-url");
+            const message = document.querySelector("#text-messages");
+            const targetUrl = document.querySelector("#target-url").value;
+            try {
+                let name;
+                if (userInfo.paid) {
+                    name = document.querySelector("#short-url").value;
+                }
+
+                const url = api + "create";
+
+                const data = {
+                    key: name,
+                    "target url": targetUrl
+                };
+
+                btnSubmit.textContent = "Generating...";
+
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token
+                    },
+                    body: JSON.stringify(data),
+                });
+                // ...
+
+                if (response.ok) {
+                    const responseData = await response.json();
+                    btnSubmit.textContent = "Submit";
+                    console.log(responseData);
+                    hideLoader();
+
+                    if (responseData && responseData["Short URL"]) {
+                        const shortUrl = responseData["Short URL"];
+                        message.classList.remove("error");
+                        message.textContent = `URL generated successfully: ${shortUrl}`;
+
+                        // Copy to Clipboard
+                        const tempInput = document.createElement('input');
+                        tempInput.value = shortUrl;
+                        document.body.appendChild(tempInput);
+                        tempInput.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(tempInput);
+
+                        message.textContent = "Copied to clipboard.";
+
+                        // Reset button and message after 3000ms
+                        setTimeout(() => {
+                            btnSubmit.textContent = "Submit";
+                            message.textContent = "";
+                        }, 3000);
+                    } else {
+                        // Error handling for missing or invalid response data
+                        message.classList.add("error");
+                        message.innerHTML = "Failed to generate URL. Invalid response data.";
+
+                        // Reset button and message after 3000ms
+                        setTimeout(() => {
+                            btnSubmit.textContent = "Submit";
+                            message.textContent = "";
+                        }, 3000);
+                    }
+                }
+            } catch (error) {
+                hideLoader();
+                btnSubmit.textContent = "Submit";
+                message.classList.add("error");
+                message.innerHTML = "Failed to generate URL.";
+                console.error(error);
+
+                // Reset button and message after 3000ms
+                setTimeout(() => {
+                    message.textContent = "";
+                }, 3000);
+            }
+        };
+
+
+    </script>
+</body>
+</html>
