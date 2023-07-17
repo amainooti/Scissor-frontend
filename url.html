@@ -19,7 +19,7 @@
             <div class="container-wrapper">
                 <div id="loader" class="loader"></div>
                 <div class="url-container">
-                    <p class="">Welcome, __user input the values</p>
+                    <p class="">Welcome, input the values</p>
                     <input id="target-url" type="text" placeholder="Enter Target Url" />
                     <button class="btn-url" type="submit">Submit</button>
                     <small id="text-messages"></small>
@@ -43,7 +43,7 @@
             window.location.href = "index.html";
         }
 
-        //get the user data from localstorage
+        //get th user data from localstorage
         const user = localStorage.getItem('user');
         const userInfo = JSON.parse(user);
 
@@ -80,6 +80,9 @@
         }
 
 
+        //Short	Original	Clicks	Date created
+
+
 
         const handleSubmit = async (event) => {
             event.preventDefault();
@@ -110,13 +113,14 @@
                     },
                     body: JSON.stringify(data),
                 });
-                // ...
 
                 if (response.ok) {
                     const responseData = await response.json();
+                    console.log(responseData);
                     btnSubmit.textContent = "Submit";
                     console.log(responseData);
                     hideLoader();
+
 
                     if (responseData && responseData["Short URL"]) {
                         const shortUrl = responseData["Short URL"];
@@ -133,12 +137,26 @@
 
                         message.textContent = "Copied to clipboard.";
 
+                        //Short	Original	Clicks	Date created
+                        let shortUrlData = JSON.parse(localStorage.getItem("shortUrl")) || [];
+
+                        const urlParams = {
+                            shortUrl: shortUrl,
+                            targetUrl: targetUrl,
+                            datecreated: new Date().toISOString()
+                        };
+
+                        shortUrlData.push(urlParams);
+                        localStorage.setItem('shortUrl', JSON.stringify(shortUrlData)); // Store URL params in local storage
                         // Reset button and message after 3000ms
                         setTimeout(() => {
+                            targetUrl.value = '';
+                            name.value = '';
                             btnSubmit.textContent = "Submit";
-                            message.textContent = "";
+                            message.textContent = `Short URL: ${shortUrl}`; // Display the short URL again
                         }, 3000);
-                    } else {
+                    }
+                    else {
                         // Error handling for missing or invalid response data
                         message.classList.add("error");
                         message.innerHTML = "Failed to generate URL. Invalid response data.";
