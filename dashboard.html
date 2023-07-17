@@ -28,8 +28,8 @@
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
             <div>
+                <div id="loader" class="loader"></div>
                 <a href="#dashboard" class="nav_logo">
-                    <div id="loader" class="loader"></div>
 
                     <i class="bx bx-layer nav_logo-icon"></i>
                     <span class="nav_logo-name">Scissor</span>
@@ -74,9 +74,9 @@
     <!--Container Dashboard start-->
     <div class="main-content">
         <div class="height-100 bg-light" id="dashboard" style="display: none;">
-            <h2>Overview</h2>
+            <h2 class="welcome">Welcome</h2>
             <div class="ag-format-container">
-                <div class="ag-courses_box">
+                <!-- <div class="ag-courses_box">
 
                     <div class="ag-courses_item">
                         <a href="#" class="ag-courses-item_link">
@@ -115,7 +115,7 @@
                         </a>
                     </div>
 
-                </div>
+                </div> -->
             </div>
             <h4>Activity</h4>
             <table class="table table-bordered">
@@ -128,21 +128,7 @@
                         <th scope="col">Date created</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>@mdo</td>
-                    </tr>
+                <tbody id="table-container">
                 </tbody>
             </table>
         </div>
@@ -166,7 +152,14 @@
         const overlay = document.getElementById('overlay');
         const confirmLogoutBtn = document.getElementById('confirmLogout');
         const cancelLogoutBtn = document.getElementById('cancelLogout');
+        const tableContainer = document.getElementById('table-container');
+        const welcomeText = document.querySelector('.welcome')
 
+
+
+        const api = "https://scissor-g3ga.onrender.com/";
+
+        //could've added a .style attribute and styled
         createLinkBtn.classList.add('btn-black');
 
         function showLoader() {
@@ -178,20 +171,25 @@
             const loader = document.getElementById('loader');
             loader.style.display = 'none';
         }
+
         // Looping through the nav and adding a display of none to them
         sidebarLinks.forEach((link, index) => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
 
-                // Hide all content divs
-                contentDivs.forEach((div) => {
-                    div.style.display = 'none';
-                });
-
                 // Show the corresponding content div
-                contentDivs[index].style.display = 'block';
+                contentDivs.forEach((div, divIndex) => {
+                    if (divIndex === index) {
+                        div.style.display = 'block';
+                    } else {
+                        div.style.display = 'none';
+                    }
+                });
             });
         });
+
+        // Show the first content div by default
+        contentDivs[0].style.display = 'block';
 
         // Get the token from local storage
         const token = localStorage.getItem('token');
@@ -200,8 +198,13 @@
         }
 
         // Logout functionality
-        let logoutButton = document.querySelector("#sign_out");
+        const handleLogout = () => {
+            localStorage.removeItem('shortUrl'); // Remove the urlParams from local storage
+            localStorage.removeItem('token'); // Remove the token from local storage
+            window.location.href = "index.html"; // Redirect to the index.html or login page
+        };
 
+        let logoutButton = document.querySelector("#sign_out");
         logoutButton.addEventListener("click", () => {
             overlay.style.display = 'block'; // Show the overlay
         });
@@ -212,7 +215,7 @@
 
             // Simulate a delay of 2 seconds before logging out
             setTimeout(() => {
-                localStorage.removeItem('token');
+                handleLogout();
                 window.location.href = "index.html";
             }, 2000);
         });
@@ -228,13 +231,35 @@
             window.location.href = "url.html";
         });
 
+        const shortUrlData = JSON.parse(localStorage.getItem("shortUrl"));
+        console.log(shortUrlData);
 
-        const users = {}
-        const fetchUsers = async () => {
 
+        const user = JSON.parse(localStorage.getItem("user"));
+        welcomeText.appendChild(document.createTextNode(" " + user.username));
+
+        function updateTable() {
+            let tableContent = "";
+            shortUrlData.forEach((data, index) => {
+                const { shortUrl, datecreated, targetUrl } = data;
+                const lastSlashIndex = shortUrl.lastIndexOf("/");
+                const shortCode = shortUrl.slice(lastSlashIndex + 1);
+                tableContent += `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${shortCode}</td>
+          <td>${targetUrl}</td>
+          <td>${index + 1}</td>
+          <td>${datecreated}</td>
+        </tr>
+      `;
+            });
+            tableContainer.innerHTML = tableContent;
         }
 
-
+        // Call the updateTable function to initially populate the table
+        updateTable();
     </script>
+
 </body>
 </html>
